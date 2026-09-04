@@ -1,0 +1,14 @@
+{
+  "name": "joby-germany-assistant",
+  "version": "1.0.0",
+  "description": "Joby AI Germany Assistant",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0"
+  }
+}

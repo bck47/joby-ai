@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Joby | Germany Assistant</title>
+
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --sidebar: #ffffff;
+      --card: #ffffff;
+      --border: #e7e9f0;
+      --text: #171923;
+      --muted: #737887;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --user-message: #2563eb;
+      --bot-message: #ffffff;
+      --shadow: 0 10px 35px rgba(20, 30, 60, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    .sidebar {
+      width: 270px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 34px;
+      padding: 0 8px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    .brand-name {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .new-chat {
+      width: 100%;
+      border: 0;
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      padding: 14px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      transition: 0.2s;
+    }
+
+    .new-chat:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .sidebar-title {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin: 0 10px 12px;
+    }
+
+    .sidebar-info {
+      background: #f2f6ff;
+      border: 1px solid #e1eaff;
+      color: #526078;
+      line-height: 1.7;
+      font-size: 13px;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 25px;
+    }
+
+    .sidebar-link {
+      padding: 12px;
+      border-radius: 10px;
+      color: #5e6575;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .sidebar-link.active,
+    .sidebar-link:hover {
+      background: #f1f5ff;
+      color: var(--primary);
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    /* ================= MAIN ================= */
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 76px;
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 34px;
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mobile-menu {
+      display: none;
+      border: 0;
+      background: transparent;
+      font-size: 23px;
+      color: var(--text);
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .topbar-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .country-badge {
+      background: #f1f5ff;
+      color: #3159a8;
+      border: 1px solid #dce6ff;
+      padding: 9px 13px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    /* ================= CHAT ================= */
+
+    .chat-area {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 48px 24px 25px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .welcome {
+      text-align: center;
+      margin: auto auto 35px;
+      max-width: 650px;
+    }
+
+    .welcome-icon {
+      width: 70px;
+      height: 70px;
+      background: #eaf1ff;
+      border: 1px solid #d7e4ff;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      font-size: 34px;
+    }
+
+    .welcome h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.2;
+      letter-spacing: -1.4px;
+      margin-bottom: 14px;
+    }
+
+    .welcome p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .welcome small {
+      color: #9ba1af;
+      font-size: 12px;
+    }
+
+    .suggestions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 650px;
+      width: 100%;
+      margin: 0 auto 25px;
+    }
+
+    .suggestion {
+      text-align: left;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      color: #42495a;
+      transition: 0.2s;
+    }
+
+    .suggestion:hover {
+      border-color: #b9cbf9;
+      background: #fbfcff;
+      transform: translateY(-2px);
+    }
+
+    .suggestion strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .suggestion span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* ================= MESSAGES ================= */
+
+    .messages {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      padding-bottom: 25px;
+    }
+
+    .message-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .bot-avatar {
+      background: var(--primary);
+      color: white;
+    }
+
+    .user-avatar {
+      background: #e9edf5;
+      color: #596174;
+      order: 2;
+      font-size: 11px;
+    }
+
+    .message {
+      max-width: min(75%, 650px);
+      padding: 15px 17px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .bot-message {
+      background: var(--bot-message);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-top-left-radius: 5px;
+    }
+
+    .user-message {
+      background: var(--user-message);
+      color: white;
+      border-top-right-radius: 5px;
+    }
+
+    .message-time {
+      font-size: 10px;
+      color: #a0a6b3;
+      margin-top: 6px;
+    }
+
+    .user .message-time {
+      text-align: right;
+      color: #dce7ff;
+    }
+
+    /* ================= COMPOSER ================= */
+
+    .composer-wrapper {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .composer {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      background: white;
+      border: 1px solid #dfe3ec;
+      border-radius: 18px;
+      padding: 10px;
+      box-shadow: 0 8px 25px rgba(30, 50, 100, 0.06);
+    }
+
+    .composer:focus-within {
+      border-color: #9eb9f7;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+    }
+
+    #messageInput {
+      flex: 1;
+      min-width: 0;
+      resize: none;
+      border: 0;
+      outline: 0;
+      padding: 10px 8px;
+      max-height: 130px;
+      line-height: 1.6;
+      color: var(--text);
+      background: transparent;
+      font-size: 14px;
+    }
+
+    #messageInput::placeholder {
+      color: #a2a8b5;
+    }
+
+    .send-button {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--primary);
+      color: white;
+      font-size: 19px;
+      transition: 0.2s;
+    }
+
+    .send-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .send-button:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .composer-hint {
+      text-align: center;
+      color: #a1a7b3;
+      font-size: 11px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    /* ================= TYPING ================= */
+
+    .typing {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #9ba6ba;
+      animation: typing 1.2s infinite;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        opacity: 0.3;
+        transform: translateY(0);
+      }
+
+      30% {
+        opacity: 1;
+        transform: translateY(-3px);
+      }
+    }
+
+    /* ================= STATUS ================= */
+
+    .training-status {
+      position: fixed;
+      right: 15px;
+      bottom: 15px;
+      background: white;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      z-index: 50;
+    }
+
+    .training-status.loaded {
+      color: #15803d;
+    }
+
+    .training-status.error {
+      color: #b91c1c;
+    }
+
+    /* ================= LANGUAGE ================= */
+
+    .message.rtl {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .message.ltr {
+      direction: ltr;
+      text-align: left;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 800px) {
+
+      .sidebar {
+        position: fixed;
+        left: -290px;
+        top: 0;
+        bottom: 0;
+        z-index: 20;
+        transition: 0.25s;
+        box-shadow: 15px 0 35px rgba(0, 0, 0, 0.08);
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .topbar {
+        padding: 0 18px;
+      }
+
+      .chat-area {
+        padding: 30px 15px 18px;
+      }
+
+      .suggestions {
+        grid-template-columns: 1fr;
+      }
+
+      .message {
+        max-width: 85%;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .topbar-subtitle {
+        display: none;
+      }
+
+      .country-badge {
+        font-size: 11px;
+        padding: 8px 10px;
+      }
+
+      .welcome {
+        margin-top: 15px;
+      }
+
+      .welcome h1 {
+        font-size: 30px;
+      }
+
+      .welcome p {
+        font-size: 14px;
+      }
+
+      .message {
+        max-width: 90%;
+        font-size: 13px;
+      }
+
+      .training-status {
+        display: none;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+```
+<div class="brand">
+  <div class="brand-icon">J</div>
+  <div class="brand-name">Joby</div>
+</div>
+
+<button class="new-chat" id="newChat">
+  ＋ New chat
+</button>
+
+<div class="sidebar-title">
+  About Joby
+</div>
+
+<div class="sidebar-info">
+  🇩🇪 Your AI assistant for questions about studying and working in Germany.
+  <br><br>
+  You can write naturally in English or Arabic.
+</div>
+
+<div class="sidebar-title">
+  Navigation
+</div>
+
+<div class="sidebar-link active">
+  💬 Open conversation
+</div>
+
+<div class="sidebar-link">
+  🎓 Study in Germany
+</div>
+
+<div class="sidebar-link">
+  💼 Work in Germany
+</div>
+
+<div class="sidebar-link">
+  🛂 Visa information
+</div>
+
+<div class="sidebar-bottom">
+  Joby is designed for Germany-related questions.
+  <br>
+  Always verify important information through official sources.
+</div>
+```
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+```
+<header class="topbar">
+
+  <div class="topbar-left">
+
+    <button
+      class="mobile-menu"
+      id="mobileMenu"
+      aria-label="Open menu"
+    >
+      ☰
+    </button>
+
+    <div>
+
+      <div class="topbar-title">
+        Joby
+      </div>
+
+      <div class="topbar-subtitle">
+        Your assistant for Germany
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="country-badge">
+    🇩🇪 Germany
+  </div>
+
+</header>
+
+<section class="chat-area">
+
+  <!-- WELCOME -->
+
+  <div class="welcome" id="welcome">
+
+    <div class="welcome-icon">
+      🇩🇪
+    </div>
+
+    <h1>
+      How can I help you?
+    </h1>
+
+    <p>
+      Ask me anything about studying or working in Germany.
+    </p>
+
+    <small>
+      Write naturally in English or Arabic
+    </small>
+
+  </div>
+
+  <!-- SUGGESTIONS -->
+
+  <div class="suggestions" id="suggestions">
+
+    <button
+      class="suggestion"
+      data-question="How can I study in Germany?"
+    >
+      <strong>
+        🎓 Study in Germany
+      </strong>
+
+      <span>
+        Universities, admission requirements and student visas.
+      </span>
+    </button>
+
+    <button
+      class="suggestion"
+      data-question="How can I find a job in Germany?"
+    >
+      <strong>
+        💼 Work in Germany
+      </strong>
+
+      <span>
+        Jobs, qualifications and work opportunities.
+      </span>
+    </button>
+
+    <button
+      class="suggestion"
+      data-question="What visa do I need for Germany?"
+    >
+      <strong>
+        🛂 Visa information
+      </strong>
+
+      <span>
+        General information about German visa types.
+      </span>
+    </button>
+
+    <button
+      class="suggestion"
+      data-question="How much does it cost to live in Germany?"
+    >
+      <strong>
+        💰 Living costs
+      </strong>
+
+      <span>
+        Rent, food, transportation and monthly expenses.
+      </span>
+    </button>
+
+  </div>
+
+  <!-- MESSAGES -->
+
+  <div
+    class="messages"
+    id="messages"
+  ></div>
+
+  <!-- COMPOSER -->
+
+  <div class="composer-wrapper">
+
+    <div class="composer">
+
+      <textarea
+        id="messageInput"
+        rows="1"
+        placeholder="Message Joby..."
+        aria-label="Message Joby"
+      ></textarea>
+
+      <button
+        class="send-button"
+        id="sendButton"
+        aria-label="Send message"
+        title="Send message"
+      >
+        ➤
+      </button>
+
+    </div>
+
+    <div class="composer-hint">
+      Joby can make mistakes. Check official information before making decisions.
+    </div>
+
+  </div>
+
+</section>
+```
+
+  </main>
+
+</div>
+
+<!-- STATUS -->
+
+<div
+  class="training-status"
+  id="trainingStatus"
+>
+  Connecting to Joby...
+</div>
+
+<script>
+
+  /* =========================================================
+     API CONNECTION
+     ========================================================= */
+
+  /*
+    IMPORTANT:
+
+    If index.html is opened directly using file://,
+    the browser cannot use /api/chat correctly.
+
+    In that case we automatically connect to:
+    http://localhost:3000
+
+    If the website is served by Express,
+    we use the same server automatically.
+  */
+
+  const API_BASE =
+    window.location.protocol === "file:"
+      ? "http://localhost:3000"
+      : "";
+
+
+  function apiUrl(endpoint) {
+
+    return API_BASE + endpoint;
+
+  }
+
+
+  /* =========================================================
+     ELEMENTS
+     ========================================================= */
+
+  const welcome =
+    document.getElementById("welcome");
+
+  const suggestions =
+    document.getElementById("suggestions");
+
+  const messages =
+    document.getElementById("messages");
+
+  const input =
+    document.getElementById("messageInput");
+
+  const sendButton =
+    document.getElementById("sendButton");
+
+  const newChat =
+    document.getElementById("newChat");
+
+  const mobileMenu =
+    document.getElementById("mobileMenu");
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  const trainingStatus =
+    document.getElementById("trainingStatus");
+
+
+  /* =========================================================
+     STATE
+     ========================================================= */
+
+  let conversationHistory = [];
+
+  let isSending = false;
+
+
+  /* =========================================================
+     CHECK SERVER
+     ========================================================= */
+
+  async function checkServer() {
+
+    try {
+
+      const response =
+        await fetch(
+          apiUrl("/api/health"),
+          {
+            method: "GET",
+            cache: "no-store"
+          }
+        );
+
+      if (!response.ok) {
+
+        throw new Error(
+          `Server returned HTTP ${response.status}`
+        );
+
+      }
+
+      const data =
+        await response.json();
+
+
+      if (!data.success) {
+
+        throw new Error(
+          data.error ||
+          "Joby server is not ready."
+        );
+
+      }
+
+
+      trainingStatus.textContent =
+        "✓ Joby AI connected";
+
+
+      trainingStatus.classList.remove(
+        "error"
+      );
+
+
+      trainingStatus.classList.add(
+        "loaded"
+      );
+
+
+      console.log(
+        "JOBY SERVER CONNECTED:",
+        data
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "JOBY SERVER CHECK FAILED:",
+        error
+      );
+
+
+      trainingStatus.textContent =
+        "⚠ Joby AI offline";
+
+
+      trainingStatus.classList.remove(
+        "loaded"
+      );
+
+
+      trainingStatus.classList.add(
+        "error"
+      );
+
+    }
+
+  }
+
+
+  checkServer();
+
+
+  /* =========================================================
+     LANGUAGE
+     ========================================================= */
+
+  function isArabic(text) {
+
+    return /[\u0600-\u06FF]/.test(
+      text
+    );
+
+  }
+
+
+  /* =========================================================
+     TIME
+     ========================================================= */
+
+  function getCurrentTime() {
+
+    return new Date().toLocaleTimeString(
+      [],
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     ADD MESSAGE
+     ========================================================= */
+
+  function addMessage(
+    text,
+    type
+  ) {
+
+    welcome.style.display =
+      "none";
+
+    suggestions.style.display =
+      "none";
+
+    messages.style.display =
+      "flex";
+
+
+    const row =
+      document.createElement("div");
+
+
+    row.className =
+      "message-row " + type;
+
+
+    const avatar =
+      document.createElement("div");
+
+
+    avatar.className =
+      "avatar " +
+      (
+        type === "bot"
+          ? "bot-avatar"
+          : "user-avatar"
+      );
+
+
+    avatar.textContent =
+      type === "bot"
+        ? "J"
+        : "You";
+
+
+    const content =
+      document.createElement("div");
+
+
+    const message =
+      document.createElement("div");
+
+
+    message.className =
+      "message " +
+      (
+        type === "bot"
+          ? "bot-message"
+          : "user-message"
+      );
+
+
+    if (isArabic(text)) {
+
+      message.classList.add(
+        "rtl"
+      );
+
+    } else {
+
+      message.classList.add(
+        "ltr"
+      );
+
+    }
+
+
+    message.textContent =
+      text;
+
+
+    const time =
+      document.createElement("div");
+
+
+    time.className =
+      "message-time";
+
+
+    time.textContent =
+      getCurrentTime();
+
+
+    content.appendChild(
+      message
+    );
+
+
+    content.appendChild(
+      time
+    );
+
+
+    if (type === "bot") {
+
+      row.appendChild(
+        avatar
+      );
+
+      row.appendChild(
+        content
+      );
+
+    } else {
+
+      row.appendChild(
+        content
+      );
+
+      row.appendChild(
+        avatar
+      );
+
+    }
+
+
+    messages.appendChild(
+      row
+    );
+
+
+    scrollToBottom();
+
+  }
+
+
+  /* =========================================================
+     TYPING
+     ========================================================= */
+
+  function addTyping() {
+
+    removeTyping();
+
+
+    const row =
+      document.createElement("div");
+
+
+    row.className =
+      "message-row bot";
+
+
+    row.id =
+      "typingMessage";
+
+
+    const avatar =
+      document.createElement("div");
+
+
+    avatar.className =
+      "avatar bot-avatar";
+
+
+    avatar.textContent =
+      "J";
+
+
+    const message =
+      document.createElement("div");
+
+
+    message.className =
+      "message bot-message";
+
+
+    const typing =
+      document.createElement("div");
+
+
+    typing.className =
+      "typing";
+
+
+    typing.innerHTML = `
+      <span></span>
+      <span></span>
+      <span></span>
+    `;
+
+
+    message.appendChild(
+      typing
+    );
+
+
+    row.appendChild(
+      avatar
+    );
+
+
+    row.appendChild(
+      message
+    );
+
+
+    messages.appendChild(
+      row
+    );
+
+
+    scrollToBottom();
+
+  }
+
+
+  function removeTyping() {
+
+    const typing =
+      document.getElementById(
+        "typingMessage"
+      );
+
+
+    if (typing) {
+
+      typing.remove();
+
+    }
+
+  }
+
+
+  /* =========================================================
+     SCROLL
+     ========================================================= */
+
+  function scrollToBottom() {
+
+    setTimeout(() => {
+
+      window.scrollTo({
+        top:
+          document.body.scrollHeight,
+        behavior:
+          "smooth"
+      });
+
+    }, 50);
+
+  }
+
+
+  /* =========================================================
+     SEND MESSAGE
+     ========================================================= */
+
+  async function sendMessage(
+    customText = null
+  ) {
+
+    if (isSending) {
+      return;
+    }
+
+
+    const text =
+      customText !== null
+        ? customText.trim()
+        : input.value.trim();
+
+
+    if (!text) {
+      return;
+    }
+
+
+    isSending =
+      true;
+
+
+    sendButton.disabled =
+      true;
+
+
+    addMessage(
+      text,
+      "user"
+    );
+
+
+    /*
+      IMPORTANT:
+
+      We send the previous history only.
+      The backend adds the current message.
+    */
+
+    const previousHistory =
+      [...conversationHistory];
+
+
+    input.value =
+      "";
+
+    input.style.height =
+      "auto";
+
+
+    addTyping();
+
+
+    try {
+
+      console.log(
+        "Sending message to:",
+        apiUrl("/api/chat")
+      );
+
+
+      const response =
+        await fetch(
+          apiUrl("/api/chat"),
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+
+              message: text,
+
+              history:
+                previousHistory
+
+            })
+
+          }
+        );
+
+
+      let data;
+
+
+      try {
+
+        data =
+          await response.json();
+
+      } catch (jsonError) {
+
+        throw new Error(
+          `Server returned an invalid response (HTTP ${response.status}).`
+        );
+
+      }
+
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+
+        throw new Error(
+          data.error ||
+          `Joby request failed (HTTP ${response.status}).`
+        );
+
+      }
+
+
+      removeTyping();
+
+
+      const reply =
+        typeof data.reply === "string" &&
+        data.reply.trim()
+          ? data.reply.trim()
+          : "Sorry, I couldn't generate a response.";
+
+
+      addMessage(
+        reply,
+        "bot"
+      );
+
+
+      /*
+        Save conversation history.
+      */
+
+      conversationHistory.push({
+
+        role: "user",
+
+        content: text
+
+      });
+
+
+      conversationHistory.push({
+
+        role: "assistant",
+
+        content: reply
+
+      });
+
+
+    } catch (error) {
+
+      console.error(
+        "================================"
+      );
+
+      console.error(
+        "JOBY FRONTEND ERROR"
+      );
+
+      console.error(
+        "================================"
+      );
+
+      console.error(
+        error
+      );
+
+
+      removeTyping();
+
+
+      let errorText;
+
+
+      if (
+        error.message &&
+        error.message.includes(
+          "Failed to fetch"
+        )
+      ) {
+
+        errorText =
+          isArabic(text)
+
+            ? `ما قدرت اتصل بسيرفر Joby.
+
+تأكد إنك مشغّل السيرفر بالأمر:
+
+npm start
+
+وبعدين افتح:
+
+http://localhost:3000
+
+مش index.html مباشرة.`
+
+            : `I couldn't connect to the Joby server.
+
+Make sure the server is running with:
+
+npm start
+
+Then open:
+
+http://localhost:3000
+
+instead of opening index.html directly.`;
+
+      } else {
+
+        errorText =
+          isArabic(text)
+
+            ? `صار في مشكلة مع Joby AI.
+
+التفاصيل:
+${error.message}`
+
+            : `There was a problem with Joby AI.
+
+Details:
+${error.message}`;
+
+      }
+
+
+      addMessage(
+        errorText,
+        "bot"
+      );
+
+    } finally {
+
+      isSending =
+        false;
+
+
+      sendButton.disabled =
+        false;
+
+
+      input.focus();
+
+    }
+
+  }
+
+
+  /* =========================================================
+     SEND BUTTON
+     ========================================================= */
+
+  sendButton.addEventListener(
+    "click",
+    () => {
+
+      sendMessage();
+
+    }
+  );
+
+
+  /* =========================================================
+     ENTER KEY
+     ========================================================= */
+
+  input.addEventListener(
+    "keydown",
+    (event) => {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        sendMessage();
+
+      }
+
+    }
+  );
+
+
+  /* =========================================================
+     AUTO RESIZE
+     ========================================================= */
+
+  input.addEventListener(
+    "input",
+    () => {
+
+      input.style.height =
+        "auto";
+
+
+      input.style.height =
+        Math.min(
+          input.scrollHeight,
+          130
+        ) + "px";
+
+    }
+  );
+
+
+  /* =========================================================
+     SUGGESTIONS
+     ========================================================= */
+
+  document
+    .querySelectorAll(
+      ".suggestion"
+    )
+    .forEach(
+      (button) => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            sendMessage(
+              button.dataset.question
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  /* =========================================================
+     NEW CHAT
+     ========================================================= */
+
+  newChat.addEventListener(
+    "click",
+    () => {
+
+      messages.innerHTML =
+        "";
+
+
+      messages.style.display =
+        "none";
+
+
+      suggestions.style.display =
+        "grid";
+
+
+      welcome.style.display =
+        "block";
+
+
+      conversationHistory =
+        [];
+
+
+      input.value =
+        "";
+
+
+      input.style.height =
+        "auto";
+
+
+      input.focus();
+
+
+      sidebar.classList.remove(
+        "open"
+      );
+
+    }
+  );
+
+
+  /* =========================================================
+     MOBILE MENU
+     ========================================================= */
+
+  mobileMenu.addEventListener(
+    "click",
+    () => {
+
+      sidebar.classList.toggle(
+        "open"
+      );
+
+    }
+  );
+
+
+  /* =========================================================
+     CLOSE SIDEBAR
+     ========================================================= */
+
+  document
+    .querySelector(".main")
+    .addEventListener(
+      "click",
+      () => {
+
+        sidebar.classList.remove(
+          "open"
+        );
+
+      }
+    );
+
+</script>
+
+</body>
+</html>
