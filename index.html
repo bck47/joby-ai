@@ -7,19 +7,26 @@
 
   <title>Joby | Germany Assistant</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=Fira+Sans+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #f7f8fc;
-      --sidebar: #ffffff;
+      /* Paper + Autobahn signage palette */
+      --bg: #eeece5;
+      --sidebar: #0b3d78;
+      --sidebar-dark: #082a54;
       --card: #ffffff;
-      --border: #e7e9f0;
-      --text: #171923;
-      --muted: #737887;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --user-message: #2563eb;
+      --border: #dcd8cd;
+      --text: #1a1c20;
+      --muted: #6d6f77;
+      --primary: #0b3d78;
+      --primary-dark: #082a54;
+      --accent: #ffb703;
+      --user-message: #0b3d78;
       --bot-message: #ffffff;
-      --shadow: 0 10px 35px rgba(20, 30, 60, 0.06);
+      --shadow: 0 10px 30px rgba(15, 25, 45, 0.07);
     }
 
     * {
@@ -32,7 +39,11 @@
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: "Fira Sans", Arial, Helvetica, sans-serif;
+    }
+
+    h1, .brand-name, .topbar-title, .suggestion strong {
+      font-family: "Fira Sans Condensed", "Fira Sans", Arial, sans-serif;
     }
 
     button,
@@ -54,10 +65,12 @@
     .sidebar {
       width: 270px;
       background: var(--sidebar);
-      border-right: 1px solid var(--border);
+      background-image: linear-gradient(180deg, var(--sidebar) 0%, var(--sidebar-dark) 100%);
+      border-right: 1px solid var(--sidebar-dark);
       display: flex;
       flex-direction: column;
       padding: 24px 18px;
+      color: #eef2fb;
     }
 
     .brand {
@@ -71,78 +84,89 @@
     .brand-icon {
       width: 42px;
       height: 42px;
-      border-radius: 14px;
-      background: var(--primary);
-      color: white;
+      border-radius: 8px;
+      background: var(--accent);
+      color: var(--sidebar-dark);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 23px;
-      font-weight: bold;
+      font-size: 22px;
+      font-weight: 800;
+      font-family: "Fira Sans Condensed", sans-serif;
     }
 
     .brand-name {
       font-size: 25px;
-      font-weight: 800;
-      letter-spacing: -1px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
     }
 
     .new-chat {
       width: 100%;
-      border: 0;
-      background: var(--primary);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
       color: white;
-      border-radius: 12px;
-      padding: 14px;
-      font-weight: bold;
+      border-radius: 8px;
+      padding: 13px;
+      font-weight: 600;
+      font-size: 14px;
       margin-bottom: 30px;
       transition: 0.2s;
     }
 
     .new-chat:hover {
-      background: var(--primary-dark);
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--sidebar-dark);
       transform: translateY(-1px);
     }
 
+    .new-chat:active {
+      transform: translateY(0);
+    }
+
     .sidebar-title {
-      color: var(--muted);
+      color: rgba(238, 242, 251, 0.55);
       font-size: 12px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
       margin: 0 10px 12px;
     }
 
     .sidebar-info {
-      background: #f2f6ff;
-      border: 1px solid #e1eaff;
-      color: #526078;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-left: 3px solid var(--accent);
+      color: #d9e2f4;
       line-height: 1.7;
       font-size: 13px;
-      border-radius: 12px;
+      border-radius: 6px;
       padding: 14px;
       margin-bottom: 25px;
     }
 
     .sidebar-link {
       padding: 12px;
-      border-radius: 10px;
-      color: #5e6575;
+      border-radius: 6px;
+      color: #cfd9ee;
       font-size: 14px;
       margin-bottom: 5px;
+      border-left: 3px solid transparent;
     }
 
     .sidebar-link.active,
     .sidebar-link:hover {
-      background: #f1f5ff;
-      color: var(--primary);
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+      border-left: 3px solid var(--accent);
     }
 
     .sidebar-bottom {
       margin-top: auto;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
       padding-top: 18px;
-      color: var(--muted);
+      color: rgba(238, 242, 251, 0.55);
       font-size: 12px;
       line-height: 1.6;
       padding-left: 8px;
@@ -160,7 +184,7 @@
 
     .topbar {
       height: 76px;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(238, 236, 229, 0.9);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -184,8 +208,9 @@
     }
 
     .topbar-title {
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
     }
 
     .topbar-subtitle {
@@ -195,13 +220,14 @@
     }
 
     .country-badge {
-      background: #f1f5ff;
-      color: #3159a8;
-      border: 1px solid #dce6ff;
-      padding: 9px 13px;
-      border-radius: 30px;
+      background: var(--primary);
+      color: white;
+      border: 1px solid var(--primary-dark);
+      padding: 9px 14px;
+      border-radius: 6px;
       font-size: 13px;
-      font-weight: bold;
+      font-weight: 600;
+      letter-spacing: 0.2px;
     }
 
     /* ================= CHAT ================= */
@@ -223,22 +249,23 @@
     }
 
     .welcome-icon {
-      width: 70px;
-      height: 70px;
-      background: #eaf1ff;
-      border: 1px solid #d7e4ff;
-      border-radius: 24px;
+      width: 64px;
+      height: 64px;
+      background: var(--primary);
+      border: 1px solid var(--primary-dark);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 22px;
-      font-size: 34px;
+      font-size: 30px;
     }
 
     .welcome h1 {
-      font-size: clamp(28px, 4vw, 42px);
-      line-height: 1.2;
-      letter-spacing: -1.4px;
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -0.8px;
       margin-bottom: 14px;
     }
 
@@ -250,7 +277,7 @@
     }
 
     .welcome small {
-      color: #9ba1af;
+      color: #9a978c;
       font-size: 12px;
     }
 
@@ -267,15 +294,17 @@
       text-align: left;
       background: white;
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-left: 3px solid var(--border);
+      border-radius: 8px;
       padding: 16px;
       color: #42495a;
-      transition: 0.2s;
+      transition: border-color 0.2s, background 0.2s;
     }
 
     .suggestion:hover {
-      border-color: #b9cbf9;
-      background: #fbfcff;
+      border-color: var(--border);
+      border-left-color: var(--primary);
+      background: #fbfaf6;
       transform: translateY(-2px);
     }
 
@@ -283,7 +312,8 @@
       display: block;
       color: var(--text);
       margin-bottom: 6px;
-      font-size: 14px;
+      font-size: 15px;
+      font-weight: 700;
     }
 
     .suggestion span {
@@ -313,15 +343,15 @@
     }
 
     .avatar {
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
-      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 700;
     }
 
     .bot-avatar {
@@ -330,8 +360,8 @@
     }
 
     .user-avatar {
-      background: #e9edf5;
-      color: #596174;
+      background: #e3e0d6;
+      color: #55524a;
       order: 2;
       font-size: 11px;
     }
@@ -339,7 +369,7 @@
     .message {
       max-width: min(75%, 650px);
       padding: 15px 17px;
-      border-radius: 16px;
+      border-radius: 10px;
       font-size: 14px;
       line-height: 1.75;
       white-space: pre-wrap;
@@ -350,24 +380,24 @@
       background: var(--bot-message);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      border-top-left-radius: 5px;
+      border-top-left-radius: 3px;
     }
 
     .user-message {
       background: var(--user-message);
       color: white;
-      border-top-right-radius: 5px;
+      border-top-right-radius: 3px;
     }
 
     .message-time {
       font-size: 10px;
-      color: #a0a6b3;
+      color: #a19d90;
       margin-top: 6px;
     }
 
     .user .message-time {
       text-align: right;
-      color: #dce7ff;
+      color: #b9c9e5;
     }
 
     /* ================= COMPOSER ================= */
@@ -383,15 +413,15 @@
       align-items: flex-end;
       gap: 10px;
       background: white;
-      border: 1px solid #dfe3ec;
-      border-radius: 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       padding: 10px;
-      box-shadow: 0 8px 25px rgba(30, 50, 100, 0.06);
+      box-shadow: 0 8px 25px rgba(20, 30, 50, 0.05);
     }
 
     .composer:focus-within {
-      border-color: #9eb9f7;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(11, 61, 120, 0.1);
     }
 
     #messageInput {
@@ -409,32 +439,43 @@
     }
 
     #messageInput::placeholder {
-      color: #a2a8b5;
+      color: #a19d90;
     }
 
     .send-button {
       width: 44px;
       height: 44px;
       border: 0;
-      border-radius: 13px;
+      border-radius: 9px;
       background: var(--primary);
       color: white;
-      font-size: 19px;
+      font-size: 18px;
       transition: 0.2s;
     }
 
-    .send-button:hover {
+    .send-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .send-button:hover:not(:disabled) {
       background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .send-button:active:not(:disabled) {
+      transform: scale(0.92);
     }
 
     .send-button:disabled {
-      background: #cbd5e1;
+      background: #d3cfc3;
       cursor: not-allowed;
     }
 
     .composer-hint {
       text-align: center;
-      color: #a1a7b3;
+      color: #9a978c;
       font-size: 11px;
       margin-top: 12px;
       line-height: 1.5;
@@ -452,7 +493,8 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #9ba6ba;
+      background: var(--primary);
+      opacity: 0.55;
       animation: typing 1.2s infinite;
     }
 
@@ -476,6 +518,71 @@
       }
     }
 
+    /* ================= ENTRANCE MOTION ================= */
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bubbleIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(11, 61, 120, 0.18); }
+      50% { box-shadow: 0 0 0 6px rgba(11, 61, 120, 0); }
+    }
+
+    .welcome-icon,
+    .welcome h1,
+    .welcome p,
+    .welcome small {
+      animation: riseIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .welcome-icon { animation-delay: 0s; }
+    .welcome h1 { animation-delay: 0.08s; }
+    .welcome p { animation-delay: 0.15s; }
+    .welcome small { animation-delay: 0.2s; }
+
+    .suggestion {
+      animation: riseIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .suggestions .suggestion:nth-child(1) { animation-delay: 0.22s; }
+    .suggestions .suggestion:nth-child(2) { animation-delay: 0.28s; }
+    .suggestions .suggestion:nth-child(3) { animation-delay: 0.34s; }
+    .suggestions .suggestion:nth-child(4) { animation-delay: 0.4s; }
+
+    .message-row {
+      animation: bubbleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .welcome-icon,
+      .welcome h1,
+      .welcome p,
+      .welcome small,
+      .suggestion,
+      .message-row {
+        animation: none;
+      }
+    }
+
     /* ================= STATUS ================= */
 
     .training-status {
@@ -485,7 +592,7 @@
       background: white;
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 8px 12px;
       font-size: 11px;
       color: var(--muted);
@@ -493,11 +600,11 @@
     }
 
     .training-status.loaded {
-      color: #15803d;
+      color: #1a7a4a;
     }
 
     .training-status.error {
-      color: #b91c1c;
+      color: #b3261e;
     }
 
     /* ================= LANGUAGE ================= */
@@ -523,7 +630,7 @@
         bottom: 0;
         z-index: 20;
         transition: 0.25s;
-        box-shadow: 15px 0 35px rgba(0, 0, 0, 0.08);
+        box-shadow: 15px 0 35px rgba(0, 0, 0, 0.16);
       }
 
       .sidebar.open {
@@ -595,8 +702,7 @@
 
   <aside class="sidebar" id="sidebar">
 
-```
-<div class="brand">
+    <div class="brand">
   <div class="brand-icon">J</div>
   <div class="brand-name">Joby</div>
 </div>
@@ -640,7 +746,6 @@
   <br>
   Always verify important information through official sources.
 </div>
-```
 
   </aside>
 
@@ -648,8 +753,7 @@
 
   <main class="main">
 
-```
-<header class="topbar">
+    <header class="topbar">
 
   <div class="topbar-left">
 
@@ -800,8 +904,7 @@
 
   </div>
 
-</section>
-```
+    </section>
 
   </main>
 
